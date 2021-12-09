@@ -11,13 +11,16 @@
  *
  * The ordering of the push operations must be kept.
  */
-class RingBuffer<T> {
+export class RingBuffer<T> {
 
     constructor(capacity: number) {
+        if (capacity < 0) {
+            return;
+        }
     }
 
     public push(value: T) {
-
+        console.log(value)
     }
 
     public peek(): T | undefined {

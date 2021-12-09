@@ -27,11 +27,37 @@ import React from 'react';
  * @param key The key should be the key used by localStorage
  * @param initialValue The initial value to store for the first value.
  */
-export function useLocalStorageState<V>(key: string, initialValue: V): [V, (newValue: V) => void] {
+export function useLocalStorageState<V>(key?: string, initialValue?: V): [V, (newValue: V) => void] {
 
     // TODO: implement this code - this just returns 'any' which would not be usable.
 
-    return [] as any;
+  const [storedValue, setStoredValue] = React.useState<V>(() => {
+    try {
+      const item = window.localStorage.getItem(key!);
+      
+      return item ? JSON.parse(item) : initialValue;
+    } catch (error) {
+        
+      console.log(error);
+      return initialValue;
+    }
+  });
+
+  const setValue = (value: V) => {
+    try {
+        
+      const valueToStore =
+        value instanceof Function ? value(storedValue) : value;
+        
+      setStoredValue(valueToStore);
+      
+      window.localStorage.setItem(key!, JSON.stringify(valueToStore));
+    } catch (error) {
+        
+      console.log(error);
+    }
+  };
+  return [storedValue, setValue];
 
 }
 
